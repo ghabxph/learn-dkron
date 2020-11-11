@@ -1,0 +1,29 @@
+version: "3.8"
+
+services:
+  dkron:
+    image: dkron/dkron:v3.0.6
+    ports:
+      - "8080:8080"
+      - "8946"
+      - "6868"
+    environment:
+      - GODEBUG=netdns=go
+    command: agent --server --log-level=debug --bootstrap-expect=1
+  dkron-server:
+    image: dkron/dkron:v3.0.6
+    ports:
+      - "8080"
+      - "8946"
+      - "6868"
+    environment:
+      - GODEBUG=netdns=go
+    command: agent --server --retry-join=dkron:8946 --log-level=debug --bootstrap-expect=3
+  dkron-agent:
+    image: dkron/dkron:v3.0.6
+    ports:
+      - "8946"
+      - "6868"
+    environment:
+      - GODEBUG=netdns=go
+    command: agent --retry-join=dkron:8946 --log-level=debug

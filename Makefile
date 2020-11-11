@@ -13,3 +13,7 @@ ps:
 logs:
 	@echo ---- showing logs ----
 	docker-compose logs
+
+leader:
+	@echo ---- checking leader status ----
+	bash leadership.sh
